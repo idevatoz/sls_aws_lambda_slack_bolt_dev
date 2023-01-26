@@ -1,0 +1,31 @@
+service: slack-echo
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  region: us-east-1
+  runtime: python3.8
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "ssm:*"
+            - "ssm:GetParameter"
+            - "ssm:GetParameters"
+            - "ssm:GetParametersByPath"
+            - "ssm:PutParameter"
+            - "ssm:DeleteParameter"
+            - "ssm:DeleteParameters"
+          Resource:
+            - "arn:aws:ssm:us-east-1:394573302243:parameter/SLACK_BOT_TOKEN"
+            - "arn:aws:ssm:us-east-1:394573302243:parameter/SLACK_SIGNING_SECRET"
+
+functions:
+  echo:
+    url: true
+    handler: handler.echo
+    environment:
+      SLACK_BOT_TOKEN: SLACK_BOT_TOKEN
+      SLACK_SIGNING_SECRET: SLACK_SIGNING_SECRET

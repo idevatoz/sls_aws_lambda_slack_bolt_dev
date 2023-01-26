@@ -1,0 +1,4 @@
+export PKG_DIR="slack_bolt_libs/python"
+rm -rf ${PKG_DIR} && mkdir -p ${PKG_DIR}
+docker run --rm -it -v $(pwd)/slack_bolt_libs:/var/layer -w /var/layer lambci/lambda:build-python3.8 bash
+pip install -r requirements.txt -t python

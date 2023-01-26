@@ -1,0 +1,21 @@
+# https://towardsdatascience.com/how-to-install-python-packages-for-aws-lambda-layer-74e193c76a91
+
+To download libraries in slack_bolt_libs/python directory rather installing them: 
+pip install -t slack_bolt_libs/python -r aws_requirements.txt
+
+cd slack_bolt_libs
+zip -r -q ../slack_bolt_libs.zip ./python/
+
+To extract the zip file to different directory:
+unzip slack_bolt_libs.zip -d ~/temp_then_del_me
+
+To view the content of a zip file without extracting the zip file:
+zip -sf slack_bolt_libs.zip
+
+
+Limitations of Lambda Layers
+There are a few limitations that you need to be aware of and this includes:
+- You can only use up to 5 layers per Lambda.
+- The size of all your layers unzipped cannot exceed 250mb.
+- Layers are mounted to the /opt directory in the function’s execution environment 
+  so be sure to Layer your functions properly if you are going to have more than one.
