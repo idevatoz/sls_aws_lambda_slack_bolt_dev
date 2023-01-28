@@ -59,5 +59,6 @@ functions:
     layers:
       - Ref: PythonRequirementsLambdaLayer
     events:
-      # REST API Gateway v1
-      - http: POST /slackcc
+      - httpApi:
+          method: POST
+          path: /slackcc
