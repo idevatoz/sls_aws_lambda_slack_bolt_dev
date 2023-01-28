@@ -79,7 +79,7 @@ functions:
           method: post
 
 
-    #name: slackcc             # optional, Deployed Lambda name
+    name: cc-command           # optional, Deployed Lambda name
     #description: CC Command   # optional, Description to publish to AWS
     #runtime:  python3.8       # optional overwrite, default is provider runtime
     #memorySize: 1024          # optional, in MB, default is 1024
