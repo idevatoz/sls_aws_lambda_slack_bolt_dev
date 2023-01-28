@@ -26,6 +26,7 @@ provider:
             - "arn:aws:ssm:us-east-1:394573302243:parameter/SLACK_BOT_TOKEN"
             - "arn:aws:ssm:us-east-1:394573302243:parameter/SLACK_SIGNING_SECRET"
 
+  apiName: slack-api-v1     # Use a custom name for the API Gateway API
   apiGateway:
     resourcePolicy:
       - Effect: Allow
