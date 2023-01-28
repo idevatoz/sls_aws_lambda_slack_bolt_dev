@@ -59,6 +59,8 @@ functions:
     layers:
       - Ref: PythonRequirementsLambdaLayer
     events:
+      # HTTP API Gateway v2
+      # https://www.serverless.com/framework/docs/providers/aws/events/http-api
       - httpApi:
           method: POST
           path: /slackcc

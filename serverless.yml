@@ -26,6 +26,18 @@ provider:
             - "arn:aws:ssm:us-east-1:394573302243:parameter/SLACK_BOT_TOKEN"
             - "arn:aws:ssm:us-east-1:394573302243:parameter/SLACK_SIGNING_SECRET"
 
+  apiGateway:
+    resourcePolicy:
+      - Effect: Allow
+        Principal: "*"
+        Action: execute-api:Invoke
+        Resource:
+          - execute-api:/*/*/*
+        Condition:
+          IpAddress:
+            aws:SourceIp:
+              - "0.0.0.0/0"
+
 
 package:
   patterns:
@@ -59,8 +71,19 @@ functions:
     layers:
       - Ref: PythonRequirementsLambdaLayer
     events:
-      # HTTP API Gateway v2
-      # https://www.serverless.com/framework/docs/providers/aws/events/http-api
-      - httpApi:
-          method: POST
+      # REST API Gateway v1
+      # https://www.serverless.com/framework/docs/providers/aws/events/apigateway#simple-http-endpoint
+      - http:
           path: /slackcc
+          method: post
+
+
+    #name: slackcc             # optional, Deployed Lambda name
+    #description: CC Command   # optional, Description to publish to AWS
+    #runtime:  python3.8       # optional overwrite, default is provider runtime
+    #memorySize: 1024          # optional, in MB, default is 1024
+    #timeout: 6                # optional, in seconds, default is 6
+    #provisionedConcurrency: 3 # optional, Count of provisioned lambda instances
+    #reservedConcurrency: 5    # optional, reserved concurrency limit for this function. 
+    #                         # By default, AWS uses account concurrency limit
+    #tracing: PassThrough      # optional, overwrite, can be 'Active' or 'PassThrough'
