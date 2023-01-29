@@ -84,7 +84,7 @@ functions:
     runtime:  python3.8       # optional overwrite, default is provider runtime
     memorySize: 1024          # optional, in MB, default is 1024
     timeout: 6                # optional, in seconds, default is 6
-    #provisionedConcurrency: 3 # optional, Count of provisioned lambda instances
-    #reservedConcurrency: 5    # optional, reserved concurrency limit for this function. 
+    # provisionedConcurrency: 3 # optional, Count of provisioned lambda instances
+    reservedConcurrency: 5    # optional, reserved concurrency limit for this function. 
     #                         # By default, AWS uses account concurrency limit
-    #tracing: PassThrough      # optional, overwrite, can be 'Active' or 'PassThrough'
+    tracing: PassThrough      # optional, overwrite, can be 'Active' or 'PassThrough'
