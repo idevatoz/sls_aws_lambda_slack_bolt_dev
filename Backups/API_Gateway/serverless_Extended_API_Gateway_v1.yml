@@ -1,0 +1,90 @@
+service: slack-echo
+
+frameworkVersion: "3"
+
+plugins:
+  - serverless-python-requirements
+
+provider:
+  name: aws
+  region: us-east-1
+  runtime: python3.8
+  versionFunctions: false
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "ssm:*"
+            - "ssm:GetParameter"
+            - "ssm:GetParameters"
+            - "ssm:GetParametersByPath"
+            - "ssm:PutParameter"
+            - "ssm:DeleteParameter"
+            - "ssm:DeleteParameters"
+          Resource:
+            - "arn:aws:ssm:us-east-1:394573302243:parameter/SLACK_BOT_TOKEN"
+            - "arn:aws:ssm:us-east-1:394573302243:parameter/SLACK_SIGNING_SECRET"
+
+  apiName: slack-api-v1     # Use a custom name for the API Gateway API
+  apiGateway:
+    resourcePolicy:
+      - Effect: Allow
+        Principal: "*"
+        Action: execute-api:Invoke
+        Resource:
+          - execute-api:/*/*/*
+        Condition:
+          IpAddress:
+            aws:SourceIp:
+              - "0.0.0.0/0"
+
+
+package:
+  patterns:
+    - "!Backups/**"
+    - "!README.md"
+    - "!package.json"
+    - "!node_modules/**"
+    - "!slack_bolt_libs/**"
+    - "!package-lock.json"
+    - "!slack_bolt_req.txt"
+    - "!manual_download.txt"
+    - "!download_using_docker.txt"
+
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
+    fileName: slack_bolt_req.txt
+    layer:
+      name: slack_bolt
+      description: Slack Bolt layer built on the fly using dockerizePip.
+      compatibleRuntimes: 
+        - python3.8
+      compatibleArchitectures: 
+        - x86_64
+
+
+functions:
+  echo:
+    handler: handler.echo
+    layers:
+      - Ref: PythonRequirementsLambdaLayer
+    events:
+      # REST API Gateway v1
+      # https://www.serverless.com/framework/docs/providers/aws/events/apigateway#simple-http-endpoint
+      - http:
+          path: /slackcc
+          method: post
+
+
+    name: cc-command           # optional, Deployed Lambda name
+    description: Slack Command # optional, Description to publish to AWS
+    runtime:  python3.8       # optional overwrite, default is provider runtime
+    memorySize: 1024          # optional, in MB, default is 1024
+    timeout: 6                # optional, in seconds, default is 6
+    # provisionedConcurrency: 3 # optional, Count of provisioned lambda instances
+    reservedConcurrency: 5    # optional, reserved concurrency limit for this function. 
+    #                         # By default, AWS uses account concurrency limit
+    tracing: PassThrough      # optional, overwrite, can be 'Active' or 'PassThrough'
